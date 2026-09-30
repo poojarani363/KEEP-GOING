@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KEEPGOING — Habit Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+        --bg:#0b0d12;
+            --card:#141821;
+                --card-2:#1b212d;
+                    --line:#252c3a;
+                        --text:#eef1f6;
+                            --muted:#8b93a7;
+                                --accent:#6c5ce7;
+                                    --ok:#22c55e;
+  }
+    *{box-sizing:border-box;margin:0;padding:0}
+      body{
+            background:radial-gradient(1200px 600px at 50% -10%, #1a2030 0%, var(--bg) 60%);
+                color:var(--text);
+                    font-family:'Inter',system-ui,sans-serif;
+                        min-height:100vh;
+                            padding:28px 16px 80px;
+      }
+        .wrap{max-width:760px;margin:0 auto}
+          header{text-align:center;margin-bottom:28px}
+            h1{
+                    font-family:'Space Grotesk',sans-serif;
+                        font-size:clamp(34px,8vw,54px);
+                            letter-spacing:-1.5px;
+                                background:linear-gradient(90deg,#6c5ce7,#22c55e,#00d2ff);
+                                    -webkit-background-clip:text;background-clip:text;color:transparent;
+            }
+              .sub{color:var(--muted);font-size:14px;margin-top:6px}
+
+                .addbar{display:flex;gap:10px;margin:22px 0}
+                  input[type=text]{
+                        flex:1;background:var(--card);border:1px solid var(--line);
+                            color:var(--text);padding:14px 16px;border-radius:12px;font-size:15px;
+                                font-family:inherit;outline:none;
+                  }
+                    input[type=text]:focus{border-color:var(--accent)}
+                      input[type=color]{
+                            width:52px;height:52px;border:1px solid var(--line);border-radius:12px;
+                                background:var(--card);cursor:pointer;padding:4px;
+                      }
+                        button{
+                                font-family:inherit;font-weight:600;font-size:15px;cursor:pointer;
+                                    border:none;border-radius:12px;padding:14px 20px;
+                                        background:var(--accent);color:#fff;transition:transform .1s,filter .2s;
+                        }
+                          button:hover{filter:brightness(1.12)}
+                            button:active{transform:scale(.97)}
+
+                              .habit{
+                                    background:var(--card);border:1px solid var(--line);border-radius:18px;
+                                        padding:18px;margin-bottom:16px;
+                              }
+                                .habit-top{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+                                  .dot{width:12px;height:12px;border-radius:50%;flex:0 0 auto}
+                                    .hname{font-family:'Space Grotesk',sans-serif;font-size:19px;font-weight:700;flex:1}
+                                      .streak{
+                                            font-size:13px;color:var(--muted);background:var(--card-2);
+                                                padding:6px 12px;border-radius:999px;white-space:nowrap;
+                                      }
+                                        .streak b{color:var(--ok)}
+                                          .del{background:none;color:var(--muted);padding:6px 10px;font-size:18px}
+                                            .del:hover{color:#ef4444}
+
+                                              .days{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+                                                .day{
+                                                        aspect-ratio:1;border-radius:12px;background:var(--card-2);
+                                                            border:1px solid var(--line);display:flex;flex-direction:column;
+                                                                align-items:center;justify-content:center;gap:2px;cursor:pointer;
+                                                                    transition:all .15s;font-size:11px;color:var(--muted);user-select:none;
+                                                }
+                                                  .day .lbl{font-weight:600}
+                                                    .day.done{color:#fff;border-color:transparent;transform:translateY(-1px)}
+                                                      .day.done .lbl{color:rgba(255,255,255,.85)}
+                                                        .day.today{outline:2px solid var(--accent);outline-offset:2px}
+
+                                                          .graph{margin-top:16px;border-top:1px solid var(--line);padding-top:14px}
+                                                            .graph-title{font-size:12px;color:var(--muted);margin-bottom:10px;letter-spacing:.5px;text-transform:uppercase}
+                                                              .bars{display:flex;align-items:flex-end;gap:6px;height:60px}
+                                                                .bar{flex:1;background:var(--card-2);border-radius:6px 6px 0 0;min-height:4px;transition:height .3s}
+
+                                                                  .heatmap{display:grid;grid-auto-flow:column;grid-template-rows:repeat(7,1fr);gap:3px;margin-top:6px}
+                                                                    .cell{width:100%;aspect-ratio:1;border-radius:3px;background:var(--card-2)}
+
+                                                                      .empty{text-align:center;color:var(--muted);padding:50px 20px;font-size:15px}
+                                                                        .section-h{font-family:'Space Grotesk',sans-serif;font-size:16px;margin:28px 0 12px;color:var(--muted);letter-spacing:.3px}
+                                                                        </style>
+                                                                        </head>
+                                                                        <body>
+                                                                        <div class="wrap">
+                                                                          <header>
+                                                                              <h1>KEEPGOING</h1>
+                                                                                  <div class="sub">Small steps, every day.</div>
+                                                                                    </header>
+
+                                                                                      <div class="addbar">
+                                                                                          <input type="text" id="habitInput" placeholder="New habit (e.g. Read 20 min)" maxlength="40">
+                                                                                              <input type="color" id="colorInput" value="#6c5ce7">
+                                                                                                  <button id="addBtn">Add</button>
+                                                                                                    </div>
+
+                                                                                                      <div id="list"></div>
+
+                                                                                                        <div class="section-h">Overall activity</div>
+                                                                                                          <div class="habit">
+                                                                                                              <div class="graph-title">Last 5 weeks</div>
+                                                                                                                  <div class="heatmap" id="heatmap"></div>
+                                                                                                                    </div>
+                                                                                                                    </div>
+
+                                                                                                                    <script>
+                                                                                                                    const KEY='keepgoing-v1';
+                                                                                                                    let habits = JSON.parse(localStorage.getItem(KEY) || '[]');
+                                                                                                                    const DAYS=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+
+                                                                                                                    function save(){ localStorage.setItem(KEY, JSON.stringify(habits)); }
+
+                                                                                                                    function todayKey(){
+                                                                                                                          const d=new Date();
+                                                                                                                            return d.toISOString().slice(0,10);
+                                                                                                                    }
+
+                                                                                                                    function lastNDays(n){
+                                                                                                                          const out=[];
+                                                                                                                            for(let i=n-1;i>=0;i--){
+                                                                                                                                    const d=new Date();
+                                                                                                                                        d.setDate(d.getDate()-i);
+                                                                                                                                            out.push(d.toISOString().slice(0,10));
+                                                                                                                            }
+                                                                                                                              return out;
+                                                                                                                    }
+
+                                                                                                                    function streak(h){
+                                                                                                                          let s=0;
+                                                                                                                            const d=new Date();
+                                                                                                                              // if today not done, start from yesterday
+                                                                                                                                if(!h.days[todayKey()]) d.setDate(d.getDate()-1);
+                                                                                                                                  while(true){
+                                                                                                                                        const k=d.toISOString().slice(0,10);
+                                                                                                                                            if(h.days[k]){ s++; d.setDate(d.getDate()-1); }
+                                                                                                                                                else break;
+                                                                                                                                  }
+                                                                                                                                    return s;
+                                                                                                                    }
+
+                                                                                                                    function render(){
+                                                                                                                          const list=document.getElementById('list');
+                                                                                                                            if(habits.length===0){
+                                                                                                                                    list.innerHTML='<div class="empty">No habits yet.<br>Add one above and start today. 🌱</div>';
+                                                                                                                            } else {
+                                                                                                                                    const week=lastNDays(7);
+                                                                                                                                        list.innerHTML=habits.map((h,hi)=>{
+                                                                                                                                                  const st=streak(h);
+                                                                                                                                                        const bars=lastNDays(7).map(k=>{
+                                                                                                                                                                    const done=h.days[k];
+                                                                                                                                                                            const height=done?'100%':'12%';
+                                                                                                                                                                                    return `<div class="bar" style="height:${height};background:${done?h.color:'var(--card-2)'}"></div>`;
+                                                                                                                                                        }).join('');
+                                                                                                                                                              const cells=week.map(k=>{
+                                                                                                                                                                        const idx=new Date(k).getDay();
+                                                                                                                                                                                const label=DAYS[(idx+6)%7];
+                                                                                                                                                                                        const done=h.days[k];
+                                                                                                                                                                                                const isToday=k===todayKey();
+                                                                                                                                                                                                        return `<div class="day ${done?'done':''} ${isToday?'today':''}"
+                                                                                                                                                                                                                  style="${done?`background:${h.color}`:''}"
+                                                                                                                                                                                                                            data-h="${hi}" data-k="${k}">
+                                                                                                                                                                                                                                      <span class="lbl">${label[0]}</span>
+                                                                                                                                                                                                                                              </div>`;
+                                                                                                                                                              }).join('');
+                                                                                                                                                                    return `
+                                                                                                                                                                            <div class="habit">
+                                                                                                                                                                                      <div class="habit-top">
+                                                                                                                                                                                                  <span class="dot" style="background:${h.color}"></span>
+                                                                                                                                                                                                              <span class="hname">${escapeHtml(h.name)}</span>
+                                                                                                                                                                                                                          <span class="streak">🔥 <b>${st}</b> day${st===1?'':'s'}</span>
+                                                                                                                                                                                                                                      <button class="del" data-del="${hi}">✕</button>
+                                                                                                                                                                                                                                                </div>
+                                                                                                                                                                                                                                                          <div class="days">${cells}</div>
+                                                                                                                                                                                                                                                                    <div class="graph">
+                                                                                                                                                                                                                                                                                <div class="graph-title">Last 7 days</div>
+                                                                                                                                                                                                                                                                                            <div class="bars">${bars}</div>
+                                                                                                                                                                                                                                                                                                      </div>
+                                                                                                                                                                                                                                                                                                              </div>`;
+                                                                                                                                        }).join('');
+                                                                                                                            }
+                                                                                                                              renderHeatmap();
+                                                                                                                    }
+
+                                                                                                                    function renderHeatmap(){
+                                                                                                                          const hm=document.getElementById('heatmap');
+                                                                                                                            const days=lastNDays(35);
+                                                                                                                              hm.innerHTML=days.map(k=>{
+                                                                                                                                    const count=habits.filter(h=>h.days[k]).length;
+                                                                                                                                        const total=habits.length||1;
+                                                                                                                                            const ratio=count/total;
+                                                                                                                                                let bg='var(--card-2)';
+                                                                                                                                                    if(count>0){
+                                                                                                                                                              const alpha=0.25+ratio*0.75;
+                                                                                                                                                                    bg=`rgba(34,197,94,${alpha})`;
+                                                                                                                                                    }
+                                                                                                                                                        return `<div class="cell" style="background:${bg}" title="${k}: ${count} done"></div>`;
+                                                                                                                              }).join('');
+                                                                                                                    }
+
+                                                                                                                    function escapeHtml(s){
+                                                                                                                          return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+                                                                                                                    }
+
+                                                                                                                    document.getElementById('addBtn').onclick=()=>{
+                                                                                                                          const name=document.getElementById('habitInput').value.trim();
+                                                                                                                            const color=document.getElementById('colorInput').value;
+                                                                                                                              if(!name) return;
+                                                                                                                                habits.push({name,color,days:{}});
+                                                                                                                                  document.getElementById('habitInput').value='';
+                                                                                                                                    save(); render();
+                                                                                                                    };
+
+                                                                                                                    document.getElementById('habitInput').addEventListener('keydown',e=>{
+                                                                                                                          if(e.key==='Enter') document.getElementById('addBtn').click();
+                                                                                                                    });
+
+                                                                                                                    document.getElementById('list').addEventListener('click',e=>{
+                                                                                                                          const day=e.target.closest('.day');
+                                                                                                                            if(day){
+                                                                                                                                    const hi=+day.dataset.h, k=day.dataset.k;
+                                                                                                                                        if(habits[hi].days[k]) delete habits[hi].days[k];
+                                                                                                                                            else habits[hi].days[k]=true;
+                                                                                                                                                save(); render(); return;
+                                                                                                                            }
+                                                                                                                              const del=e.target.closest('.del');
+                                                                                                                                if(del){
+                                                                                                                                        const hi=+del.dataset.del;
+                                                                                                                                            if(confirm('Delete "'+habits[hi].name+'"?')){ habits.splice(hi,1); save(); render(); }
+                                                                                                                                }
+                                                                                                                    });
+
+                                                                                                                    render();
+                                                                                                                    </script>
+                                                                                                                    </body>
+                                                                                                                    </html>
+                                                                                                                                                        })
+                                                                                                                                        })
+                                                                                                                            }
+  }
